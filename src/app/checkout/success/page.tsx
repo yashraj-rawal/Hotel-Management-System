@@ -2,6 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { Suspense } from "react";
 import {
   CheckCircle, 
   Printer, 
@@ -19,7 +20,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 
-export default function SuccessPage() {
+// 1. Move the logic and UI into a separate component
+function SuccessContent() {
   const searchParams = useSearchParams();
 
   // Fallbacks for demo purposes
@@ -57,9 +59,7 @@ export default function SuccessPage() {
         {/* Decorative Top Bar */}
         <div className="absolute top-0 left-0 w-full h-2 bg-primary" />
 
-        {/* Voucher Content */}
         <CardContent className="p-8 md:p-14">
-          {/* Header Section */}
           <div className="flex flex-col md:flex-row justify-between items-start gap-6 mb-12">
             <div className="space-y-1">
               <h2 className="text-2xl font-black tracking-tighter text-slate-900 uppercase flex items-center gap-2">
@@ -80,7 +80,6 @@ export default function SuccessPage() {
             </div>
           </div>
 
-          {/* Main Details Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12">
             <div className="space-y-8">
               <div className="space-y-3">
@@ -120,7 +119,6 @@ export default function SuccessPage() {
             </div>
           </div>
 
-          {/* QR Code / Tech Section */}
           <div className="flex items-center gap-5 bg-slate-900 p-6 rounded-2xl shadow-xl shadow-slate-200">
             <div className="bg-white p-2 rounded-xl">
               <QrCode className="text-slate-900 h-12 w-12" strokeWidth={1.5} />
@@ -138,7 +136,6 @@ export default function SuccessPage() {
           </div>
         </CardContent>
 
-        {/* Perforation Effect (Visual only) */}
         <div className="absolute bottom-1/4 -left-4 w-8 h-8 bg-slate-50/50 rounded-full border border-slate-200 no-print" />
         <div className="absolute bottom-1/4 -right-4 w-8 h-8 bg-slate-50/50 rounded-full border border-slate-200 no-print" />
       </Card>
@@ -176,7 +173,6 @@ export default function SuccessPage() {
         </div>
       </div>
 
-      {/* Print Settings Hook */}
       <style jsx global>{`
         @media print {
           .no-print {
@@ -191,5 +187,21 @@ export default function SuccessPage() {
         }
       `}</style>
     </div>
+  );
+}
+
+// 2. Wrap the final export in Suspense
+export default function SuccessPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <div className="text-center space-y-4">
+          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="text-slate-500 font-bold text-xs uppercase tracking-widest">Generating Voucher...</p>
+        </div>
+      </div>
+    }>
+      <SuccessContent />
+    </Suspense>
   );
 }
