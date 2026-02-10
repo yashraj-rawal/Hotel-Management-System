@@ -65,23 +65,19 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user }) {
+      // 'user' is only available the first time the JWT is created (on login)
       if (user) {
+        token.id = user.id; // Map the ID here
         token.role = (user as any).role;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
+        (session.user as any).id = token.id; // Map the ID to the session object
         (session.user as any).role = token.role;
       }
       return session;
     },
   },
-  pages: {
-    signIn: "/login",
-  },
-  session: {
-    strategy: "jwt",
-  },
-  secret: process.env.NEXTAUTH_SECRET,
-};
+}

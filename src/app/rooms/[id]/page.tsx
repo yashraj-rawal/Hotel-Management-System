@@ -38,7 +38,7 @@ export default function RoomDetailPage() {
   const [checkOut, setCheckOut] = useState("");
 
   useEffect(() => {
-    fetch(`/api/rooms/${id}`)
+    fetch(`/api/bookings/${id}/status`)
       .then((res) => res.json())
       .then((data) => setRoom(data));
   }, [id]);

@@ -42,7 +42,7 @@ function CheckoutForm() {
           roomId,
           checkInDate: checkIn,
           checkOutDate: checkOut,
-          totalAmount: total,
+          totalAmount: Number(total),
         }),
       });
 
