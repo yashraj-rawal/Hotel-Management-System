@@ -115,7 +115,7 @@ export default async function RoomSearchPage({
                   <div className="absolute top-8 right-8">
                     <div className="bg-white/95 backdrop-blur-xl px-5 py-3 rounded-2xl border border-white/20 shadow-2xl">
                       <span className="text-xl font-black text-slate-900 italic">
-                        ₹{room.pricePerNight}
+                        ${room.pricePerNight}
                       </span>
                       <span className="text-[9px] font-black text-slate-400 uppercase ml-1.5 tracking-tighter">
                         / night
