@@ -33,5 +33,8 @@ export default withAuth(
 // Define which paths this middleware should run on
 export const config = {
   // Ensure your /api/auth paths are NOT matched here if you add more general patterns
-  matcher: ["/admin/:path*", "/staff/:path*", "/user/:path*", "/checkout/:path*"],
+  matcher: ["/admin/:path*",
+    "/staff/:path*",
+    "/user/:path*",
+    "/checkout/:path*",],
 };

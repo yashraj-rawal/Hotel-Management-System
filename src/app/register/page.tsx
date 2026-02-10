@@ -111,7 +111,7 @@ export default function RegisterPage() {
                   <Input
                     id="name"
                     type="text"
-                    placeholder="Yashraj Sharma"
+                    placeholder="Yashraj Rawal"
                     className="h-14 pl-12 bg-slate-50/50 border-slate-200 focus:ring-primary rounded-2xl font-medium"
                     onChange={(e) =>
                       setFormData({ ...formData, name: e.target.value })
