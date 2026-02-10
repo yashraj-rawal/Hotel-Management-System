@@ -1,6 +1,7 @@
 "use client";
+
 import { useSearchParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { 
   CheckCircle2, 
   CreditCard, 
@@ -19,7 +20,8 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
-export default function CheckOutPage() {
+// 1. Create a sub-component for the checkout logic
+function CheckoutForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [isProcessing, setIsProcessing] = useState(false);
@@ -32,7 +34,6 @@ export default function CheckOutPage() {
 
   const handleFinalConfirm = async () => {
     setIsProcessing(true);
-
     try {
       const response = await fetch("/api/bookings", {
         method: "POST",
@@ -46,7 +47,6 @@ export default function CheckOutPage() {
       });
 
       const data = await response.json();
-
       if (response.ok) {
         router.push(`/checkout/success?bookingId=${data._id}&total=${total}&checkIn=${checkIn}`);
       } else {
@@ -89,12 +89,10 @@ export default function CheckOutPage() {
           <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 uppercase">
             Confirm Your <span className="text-primary">Stay</span>
           </h1>
-          <p className="text-muted-foreground font-medium italic">Review your itinerary and secure your reservation at Yashraj</p>
+          <p className="text-muted-foreground font-medium italic">Review your itinerary and secure your reservation</p>
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-          
-          {/* Left Column: Summary */}
           <div className="lg:col-span-2 space-y-8">
             <Card className="border-slate-200 shadow-sm overflow-hidden">
               <CardHeader className="bg-slate-50 border-b py-4">
@@ -114,7 +112,7 @@ export default function CheckOutPage() {
                     <p className="text-[10px] font-bold text-primary uppercase tracking-widest">Accommodation</p>
                     <h3 className="text-2xl font-bold text-slate-900">{roomType} Suite</h3>
                     <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
-                      <Hotel className="h-3.5 w-3.5" /> Yashraj Premier Wing • 1 King Bed
+                      <Hotel className="h-3.5 w-3.5" /> Premier Wing • 1 King Bed
                     </div>
                   </div>
 
@@ -133,16 +131,15 @@ export default function CheckOutPage() {
               </CardContent>
             </Card>
 
-            <Alert className="bg-primary/3 border-primary/10 rounded-2xl p-6">
+            <Alert className="bg-primary/5 border-primary/10 rounded-2xl p-6">
               <ShieldCheck className="h-6 w-6 text-primary" />
               <AlertTitle className="text-sm font-bold uppercase tracking-tight text-primary">Booking Protection Active</AlertTitle>
               <AlertDescription className="text-xs text-slate-600 leading-relaxed font-medium">
-                Enjoy peace of mind with our 24-hour free cancellation policy. No hidden fees or unexpected surcharges at check-in.
+                Enjoy peace of mind with our 24-hour free cancellation policy.
               </AlertDescription>
             </Alert>
           </div>
 
-          {/* Right Column: Checkout Sidebar */}
           <div className="space-y-6">
             <Card className="border-2 border-primary/20 shadow-xl h-fit sticky top-8 overflow-hidden">
               <CardHeader className="bg-slate-900 text-white py-4 text-center">
@@ -151,7 +148,6 @@ export default function CheckOutPage() {
                 </div>
               </CardHeader>
               <CardContent className="p-6 pt-8 space-y-6">
-                {/* Method Display */}
                 <div className="flex items-center gap-4 p-4 rounded-xl bg-slate-50 border border-slate-100">
                   <div className="bg-primary p-2.5 rounded-lg text-white">
                     <CreditCard className="h-5 w-5" />
@@ -162,7 +158,6 @@ export default function CheckOutPage() {
                   </div>
                 </div>
 
-                {/* Price Breakdown */}
                 <div className="space-y-3 pt-2">
                   <div className="flex justify-between text-xs font-semibold text-slate-500">
                     <span>Room Charge</span>
@@ -203,5 +198,18 @@ export default function CheckOutPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// 2. Main export wrapped in Suspense
+export default function CheckOutPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-screen">
+        <RefreshCw className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    }>
+      <CheckoutForm />
+    </Suspense>
   );
 }
