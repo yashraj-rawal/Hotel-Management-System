@@ -3,15 +3,16 @@ import dbConnect from "@/lib/dbConnect";
 import Booking from "@/models/Booking";
 import Room from "@/models/Room";
 
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(request: NextRequest, context: { params : Promise< { id: string }> }) {
   try {
     await dbConnect();
     const { status } = await request.json();
+     const { id } = await context.params;
 
     // BUG FIX: Added 'await' here. 
     // Without it, updatedBooking is a Query object, not the result.
     const updatedBooking = await Booking.findByIdAndUpdate(
-      params.id,
+      id,
       { status },
       { new: true }
     );
