@@ -63,7 +63,7 @@ export default async function ManageRoomPage() {
             asChild
             className="rounded-full px-6 shadow-md hover:shadow-lg transition-all"
           >
-            <Link href="/admin/rooms/add">
+            <Link href="/admin/add">
               <Plus className="mr-2 h-4 w-4" /> Add New Room
             </Link>
           </Button>
